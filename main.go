@@ -6,23 +6,13 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
-
-	"github.com/joho/godotenv"
 )
 
 func getEnv(key, fallback string) string {
-	value := os.Getenv(key)
-	if len(value) == 0 {
-		return fallback
+	if value, ok := os.LookupEnv(key); ok {
+		return value
 	}
-	return value
-}
-
-// init the env variables
-func init() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatal("No .env file found")
-	}
+	return fallback
 }
 
 func getListenAddress() string {
@@ -31,7 +21,7 @@ func getListenAddress() string {
 }
 
 func getProxyURL() string {
-	return getEnv("PROXY_URL", "")
+	return os.Getenv("PROXY_URL")
 }
 
 func getSuffix() string {
