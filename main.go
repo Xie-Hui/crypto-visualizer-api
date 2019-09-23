@@ -79,7 +79,7 @@ func serveReverseProxy(proxyURL string, suffix string, w http.ResponseWriter, r 
 
 	// allow CORS
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
+	//w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "X-Requested-Width")
 
 	// serve
