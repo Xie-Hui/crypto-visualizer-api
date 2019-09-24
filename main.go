@@ -6,6 +6,8 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func getEnv(key, fallback string) string {
@@ -43,6 +45,7 @@ func logRequest(r *http.Request) {
 
 func handleRequestAndRedirect(w http.ResponseWriter, r *http.Request) {
 	proxyURL := getProxyURL()
+	log.Println(proxyURL)
 	suffix := getSuffix()
 	serveReverseProxy(proxyURL, suffix, w, r)
 }
@@ -84,6 +87,14 @@ func serveReverseProxy(proxyURL string, suffix string, w http.ResponseWriter, r 
 
 	// serve
 	proxy.ServeHTTP(w, r)
+}
+
+// init is invoked before main()
+func init() {
+	// loads values from .env into the system
+	if err := godotenv.Load(); err != nil {
+		log.Print("No .env file found")
+	}
 }
 
 func main() {
