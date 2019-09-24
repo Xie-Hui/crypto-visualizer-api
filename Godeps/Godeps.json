@@ -2,6 +2,9 @@
 	"ImportPath": "github.com/crypto-visualizer-api",
 	"GoVersion": "go1.13",
 	"GodepVersion": "v80",
+	"Packages": [
+		"./..."
+	],
 	"Deps": [
 		{
 			"ImportPath": "github.com/joho/godotenv",
