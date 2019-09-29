@@ -50,6 +50,15 @@ func handleRequestAndRedirect(w http.ResponseWriter, r *http.Request) {
 	serveReverseProxy(proxyURL, suffix, w, r)
 }
 
+func setCorsHeaders(w http.ResponseWriter, r *http.Request) {
+	// allow CORS
+	//w.Header().Set("Access-Control-Allow-Origin", "*")
+	//w.Header().Add("Vary", "Origin")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers")
+}
+
 func serveReverseProxy(proxyURL string, suffix string, w http.ResponseWriter, r *http.Request) {
 
 	target, err := url.Parse(proxyURL)
@@ -76,17 +85,13 @@ func serveReverseProxy(proxyURL string, suffix string, w http.ResponseWriter, r 
 	}
 
 	r.URL.RawQuery = query.Encode()
-
+	setCorsHeaders(w, r)
 	// log modified request
 	logRequest(r)
 
-	// allow CORS
-	w.Header().Set("Content-Type", "application/json")
-	//w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "X-Requested-Width")
-
 	// serve
 	proxy.ServeHTTP(w, r)
+
 }
 
 // init is invoked before main()
